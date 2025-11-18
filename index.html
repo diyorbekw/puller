@@ -1,0 +1,1507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NewsHub | Modern News Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* CSS Variables */
+        :root {
+            --primary-color: #1a1a2e;
+            --secondary-color: #16213e;
+            --accent-color: #0f3460;
+            --highlight-color: #e94560;
+            --text-color: #333;
+            --light-text: #f5f5f5;
+            --gray-bg: #f8f9fa;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+            --border-radius: 8px;
+            --header-height: 70px;
+        }
+
+        /* Dark Theme */
+        .dark-theme {
+            --primary-color: #121212;
+            --secondary-color: #1e1e1e;
+            --accent-color: #2d2d2d;
+            --text-color: #e0e0e0;
+            --light-text: #f5f5f5;
+            --gray-bg: #2a2a2a;
+            --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--gray-bg);
+            transition: var(--transition);
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .btn:hover {
+            background-color: #d13453;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(233, 69, 96, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background-color: var(--highlight-color);
+        }
+
+        /* Header Styles */
+        header {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: var(--header-height);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100%;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            color: var(--highlight-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            font-weight: 500;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 0;
+        }
+
+        .nav-links a:hover {
+            color: var(--highlight-color);
+        }
+
+        .nav-links a.active {
+            color: var(--highlight-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--highlight-color);
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .search-bar {
+            display: flex;
+            background-color: var(--secondary-color);
+            border-radius: 30px;
+            overflow: hidden;
+            padding: 5px 15px;
+            transition: var(--transition);
+            border: 1px solid transparent;
+        }
+
+        .search-bar:focus-within {
+            border-color: var(--highlight-color);
+        }
+
+        .search-bar input {
+            background: transparent;
+            border: none;
+            color: var(--light-text);
+            padding: 8px;
+            width: 200px;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: transparent;
+            border: none;
+            color: var(--light-text);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .search-bar button:hover {
+            color: var(--highlight-color);
+        }
+
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--light-text);
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            color: var(--highlight-color);
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .mobile-menu {
+            display: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .mobile-menu:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 5rem 0;
+            margin-bottom: 3rem;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 700px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero .category-tag {
+            display: inline-block;
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+
+        /* Categories Section */
+        .categories {
+            margin-bottom: 3rem;
+        }
+
+        .category-filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .category-filter {
+            padding: 8px 20px;
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+            border-radius: 30px;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            border: 1px solid transparent;
+        }
+
+        .category-filter.active, .category-filter:hover {
+            background-color: var(--highlight-color);
+            transform: translateY(-2px);
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .news-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+        }
+
+        .card-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 40%;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.1));
+        }
+
+        .card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .news-card:hover .card-image img {
+            transform: scale(1.05);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-category {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--highlight-color);
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            line-height: 1.3;
+        }
+
+        .card-excerpt {
+            color: #666;
+            margin-bottom: 1rem;
+            flex-grow: 1;
+        }
+
+        .card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: auto;
+        }
+
+        /* Trending Section */
+        .trending-section {
+            margin-bottom: 3rem;
+        }
+
+        .trending-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .trending-card {
+            display: flex;
+            gap: 1rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: var(--transition);
+        }
+
+        .trending-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .trending-image {
+            width: 100px;
+            height: 100px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .trending-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .trending-content {
+            padding: 1rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .trending-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: var(--light-text);
+            padding: 3rem 0 1.5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-logo i {
+            color: var(--highlight-color);
+        }
+
+        .footer-about p {
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .social-links a:hover {
+            background-color: var(--highlight-color);
+            transform: translateY(-3px);
+        }
+
+        .footer-links h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-links h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background-color: var(--highlight-color);
+        }
+
+        .footer-links ul li {
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-links ul li a {
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+
+        .footer-links ul li a:hover {
+            opacity: 1;
+            color: var(--highlight-color);
+            padding-left: 5px;
+        }
+
+        .footer-newsletter p {
+            margin-bottom: 1rem;
+            opacity: 0.8;
+        }
+
+        .newsletter-form {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+
+        .newsletter-form input {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: none;
+            border-radius: var(--border-radius) 0 0 var(--border-radius);
+            outline: none;
+            background-color: var(--secondary-color);
+            color: var(--light-text);
+        }
+
+        .newsletter-form button {
+            background-color: var(--highlight-color);
+            color: white;
+            border: none;
+            padding: 0 15px;
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .newsletter-form button:hover {
+            background-color: #d13453;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        /* Article Detail Page */
+        .article-detail {
+            padding: 2rem 0;
+        }
+
+        .article-header {
+            margin-bottom: 2rem;
+        }
+
+        .article-meta {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            color: #666;
+            font-size: 0.9rem;
+            flex-wrap: wrap;
+        }
+
+        .article-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .article-image {
+            margin-bottom: 2rem;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .article-content {
+            max-width: 800px;
+            margin: 0 auto 3rem;
+            font-size: 1.1rem;
+            line-height: 1.7;
+        }
+
+        .article-content p {
+            margin-bottom: 1.5rem;
+        }
+
+        .article-content h2 {
+            margin: 2rem 0 1rem;
+            font-size: 1.5rem;
+        }
+
+        .article-content ul, .article-content ol {
+            margin: 1rem 0 1.5rem 1.5rem;
+        }
+
+        .article-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid var(--highlight-color);
+            padding-left: 1.5rem;
+            margin: 2rem 0;
+            font-style: italic;
+            color: #555;
+        }
+
+        .article-content img {
+            margin: 2rem 0;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .related-articles {
+            margin-top: 3rem;
+        }
+
+        .related-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        /* Social Share */
+        .social-share {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .social-share a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--secondary-color);
+            border-radius: 50%;
+            transition: var(--transition);
+            color: var(--light-text);
+        }
+
+        .social-share a:hover {
+            background-color: var(--highlight-color);
+            transform: translateY(-2px);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Back to Top Button */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: var(--highlight-color);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 999;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            background-color: #d13453;
+            transform: translateY(-3px);
+        }
+
+        /* Animations */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Page Navigation */
+        .page-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--highlight-color);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition);
+        }
+
+        .toast.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+            
+            .nav-links {
+                gap: 1.5rem;
+            }
+            
+            .search-bar input {
+                width: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .mobile-menu {
+                display: flex;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: var(--header-height);
+                left: -100%;
+                width: 80%;
+                height: calc(100vh - var(--header-height));
+                background-color: var(--primary-color);
+                flex-direction: column;
+                padding: 2rem;
+                transition: var(--transition);
+                z-index: 999;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-links.active {
+                left: 0;
+            }
+            
+            .search-bar input {
+                width: 120px;
+            }
+            
+            .hero {
+                padding: 3rem 0;
+            }
+            
+            .hero h1 {
+                font-size: 1.8rem;
+            }
+            
+            .article-title {
+                font-size: 2rem;
+            }
+
+            .page-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .social-share {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            
+            .section-title {
+                font-size: 1.5rem;
+            }
+            
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-filters {
+                justify-content: center;
+            }
+            
+            .article-title {
+                font-size: 1.7rem;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .trending-card {
+                flex-direction: column;
+            }
+
+            .trending-image {
+                width: 100%;
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <i class="fas fa-newspaper"></i>
+                    <span>NewsHub</span>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="#" class="active">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Technology</a></li>
+                    <li><a href="#">Science</a></li>
+                    <li><a href="#">Business</a></li>
+                    <li><a href="#">Sports</a></li>
+                </ul>
+                
+                <div class="nav-actions">
+                    <div class="search-bar">
+                        <input type="text" placeholder="Search news..." id="searchInput">
+                        <button id="searchButton"><i class="fas fa-search"></i></button>
+                    </div>
+                    <button class="theme-toggle" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                    <div class="mobile-menu" id="mobileMenu">
+                        <i class="fas fa-bars"></i>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main id="main-content">
+        <!-- Homepage Content -->
+        <div id="homepage">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <div class="hero-content">
+                        <span class="category-tag">Technology</span>
+                        <h1>AI Breakthrough: New Model Outperforms Humans in Creative Tasks</h1>
+                        <p>Researchers at NeuroTech AI have developed a revolutionary model that demonstrates unprecedented creative capabilities, challenging our understanding of artificial intelligence.</p>
+                        <button class="btn" onclick="showArticle('ai-breakthrough')">Read Full Story</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trending Section -->
+            <section class="trending-section">
+                <div class="container">
+                    <h2 class="section-title">Trending Now</h2>
+                    <div class="trending-grid">
+                        <article class="trending-card">
+                            <div class="trending-image">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Cybersecurity">
+                            </div>
+                            <div class="trending-content">
+                                <h3 class="trending-title">Cybersecurity Firm Uncovers Major Vulnerability in Popular Apps</h3>
+                                <div class="card-meta">
+                                    <span>Alex Turner</span>
+                                    <span>May 10, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <article class="trending-card">
+                            <div class="trending-image">
+                                <img src="https://images.unsplash.com/photo-1664575602554-2087b04935a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Business Meeting">
+                            </div>
+                            <div class="trending-content">
+                                <h3 class="trending-title">Global Markets Rally as Inflation Concerns Ease</h3>
+                                <div class="card-meta">
+                                    <span>Michael Chen</span>
+                                    <span>May 13, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <article class="trending-card">
+                            <div class="trending-image">
+                                <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Basketball Game">
+                            </div>
+                            <div class="trending-content">
+                                <h3 class="trending-title">Underdog Team Stuns Champions in Historic Finals Upset</h3>
+                                <div class="card-meta">
+                                    <span>David Wilson</span>
+                                    <span>May 12, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Categories Section -->
+            <section class="categories">
+                <div class="container">
+                    <h2 class="section-title">Top Stories</h2>
+                    
+                    <div class="category-filters">
+                        <div class="category-filter active" data-category="all">All</div>
+                        <div class="category-filter" data-category="technology">Technology</div>
+                        <div class="category-filter" data-category="science">Science</div>
+                        <div class="category-filter" data-category="business">Business</div>
+                        <div class="category-filter" data-category="sports">Sports</div>
+                        <div class="category-filter" data-category="lifestyle">Lifestyle</div>
+                    </div>
+                    
+                    <div class="news-grid">
+                        <!-- News Card 1 -->
+                        <article class="news-card fade-in" data-category="technology">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Quantum Computing">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">Technology</span>
+                                <h3 class="card-title">Quantum Computing Milestone Achieved by Research Team</h3>
+                                <p class="card-excerpt">Scientists have reached a significant breakthrough in quantum computing stability, paving the way for practical applications.</p>
+                                <div class="card-meta">
+                                    <span>John Smith</span>
+                                    <span>May 15, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <!-- News Card 2 -->
+                        <article class="news-card fade-in" data-category="science">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Space Exploration">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">Science</span>
+                                <h3 class="card-title">NASA Announces New Mission to Explore Jupiter's Moon Europa</h3>
+                                <p class="card-excerpt">The space agency reveals plans for an ambitious mission to search for signs of life on Jupiter's icy moon.</p>
+                                <div class="card-meta">
+                                    <span>Sarah Johnson</span>
+                                    <span>May 14, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <!-- News Card 3 -->
+                        <article class="news-card fade-in" data-category="business">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1664575602554-2087b04935a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Business Meeting">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">Business</span>
+                                <h3 class="card-title">Global Markets Rally as Inflation Concerns Ease</h3>
+                                <p class="card-excerpt">Stock markets worldwide show strong gains following positive economic indicators and easing inflation pressures.</p>
+                                <div class="card-meta">
+                                    <span>Michael Chen</span>
+                                    <span>May 13, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <!-- News Card 4 -->
+                        <article class="news-card fade-in" data-category="sports">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1461896836934-ffe607ba8211?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Basketball Game">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">Sports</span>
+                                <h3 class="card-title">Underdog Team Stuns Champions in Historic Finals Upset</h3>
+                                <p class="card-excerpt">In one of the biggest surprises in sports history, the underdog team defeats the defending champions in a thrilling final match.</p>
+                                <div class="card-meta">
+                                    <span>David Wilson</span>
+                                    <span>May 12, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <!-- News Card 5 -->
+                        <article class="news-card fade-in" data-category="lifestyle">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1543362906-acfc16c67564?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Healthy Food">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">Lifestyle</span>
+                                <h3 class="card-title">New Study Reveals Benefits of Mediterranean Diet for Longevity</h3>
+                                <p class="card-excerpt">Research confirms that following a Mediterranean diet can significantly increase life expectancy and improve overall health.</p>
+                                <div class="card-meta">
+                                    <span>Emma Roberts</span>
+                                    <span>May 11, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                        
+                        <!-- News Card 6 -->
+                        <article class="news-card fade-in" data-category="technology">
+                            <div class="card-image">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Data Analytics">
+                            </div>
+                            <div class="card-content">
+                                <span class="card-category">Technology</span>
+                                <h3 class="card-title">Cybersecurity Firm Uncovers Major Vulnerability in Popular Apps</h3>
+                                <p class="card-excerpt">A critical security flaw affecting millions of users has been discovered and patched, highlighting ongoing digital safety concerns.</p>
+                                <div class="card-meta">
+                                    <span>Alex Turner</span>
+                                    <span>May 10, 2023</span>
+                                </div>
+                            </div>
+                        </article>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Article Detail Page (Hidden by default) -->
+        <div id="article-detail" style="display: none;">
+            <section class="article-detail">
+                <div class="container">
+                    <div class="article-header">
+                        <span class="category-tag">Technology</span>
+                        <div class="article-meta">
+                            <span>By <strong>Jennifer Lee</strong></span>
+                            <span>May 16, 2023</span>
+                            <span>8 min read</span>
+                        </div>
+                        <h1 class="article-title">AI Breakthrough: New Model Outperforms Humans in Creative Tasks</h1>
+                    </div>
+                    
+                    <div class="article-image">
+                        <img src="https://images.unsplash.com/photo-1585829365295-ab7cd400c167?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="AI Breakthrough">
+                    </div>
+                    
+                    <div class="article-content">
+                        <p>In a development that could reshape our understanding of artificial intelligence, researchers at NeuroTech AI have unveiled a new model that demonstrates unprecedented creative capabilities, outperforming humans in several creative tasks.</p>
+                        
+                        <p>The model, named "CreativeMind," was tested across a range of creative domains including story writing, visual art creation, and musical composition. In blind evaluations, human judges consistently rated the AI's outputs as more creative and original than those produced by human participants.</p>
+                        
+                        <blockquote>
+                            "This represents a paradigm shift in AI development. We're moving beyond pattern recognition into genuine creative expression," said Dr. Elena Rodriguez, lead researcher on the project.
+                        </blockquote>
+                        
+                        <p>The breakthrough comes from a novel architecture that combines transformer models with generative adversarial networks (GANs), allowing the system to not only analyze existing creative works but also generate entirely new concepts that maintain coherence and aesthetic appeal.</p>
+                        
+                        <h2>Testing Methodology</h2>
+                        
+                        <p>Researchers conducted a series of double-blind studies where human judges evaluated creative works without knowing whether they were produced by humans or AI. The tests included:</p>
+                        
+                        <ul>
+                            <li>Short story writing based on prompts</li>
+                            <li>Abstract visual art creation</li>
+                            <li>Musical composition in various genres</li>
+                            <li>Advertising slogan generation</li>
+                        </ul>
+                        
+                        <p>Across all categories, the AI's outputs were rated as significantly more creative, original, and engaging than those created by human participants. The margin was particularly wide in visual art and musical composition.</p>
+                        
+                        <img src="https://images.unsplash.com/photo-1677442136019-21780ecad995?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="AI Research">
+                        
+                        <h2>Implications for Creative Industries</h2>
+                        
+                        <p>The development has sparked both excitement and concern within creative communities. While some see it as a powerful tool that could augment human creativity, others worry about potential displacement of creative professionals.</p>
+                        
+                        <p>"This technology isn't about replacing human creativity," Rodriguez emphasized. "It's about expanding the possibilities of what we can create. The most exciting applications will come from human-AI collaboration."</p>
+                        
+                        <p>Early adopters in the entertainment industry are already experimenting with CreativeMind for generating initial concepts, storyboarding, and creating background elements for films and video games.</p>
+                        
+                        <h2>Ethical Considerations</h2>
+                        
+                        <p>The research team has been proactive in addressing ethical concerns, implementing safeguards to prevent misuse and establishing clear guidelines for attribution when AI-generated content is published commercially.</p>
+                        
+                        <p>"We're committed to responsible development," Rodriguez stated. "That means transparency about when AI is involved in creative processes and ensuring these tools enhance rather than replace human creativity."</p>
+                        
+                        <p>As the technology continues to evolve, policymakers and industry leaders are beginning to discuss how to adapt copyright laws and establish new frameworks for AI-generated content.</p>
+                    </div>
+                    
+                    <div class="page-nav">
+                        <a href="#" class="btn" onclick="showHomepage()"><i class="fas fa-arrow-left"></i> Back to Home</a>
+                        <div class="social-share">
+                            <span>Share this article:</span>
+                            <a href="#"><i class="fab fa-twitter"></i></a>
+                            <a href="#"><i class="fab fa-facebook"></i></a>
+                            <a href="#"><i class="fab fa-linkedin"></i></a>
+                        </div>
+                    </div>
+                    
+                    <section class="related-articles">
+                        <h2 class="section-title">Related Articles</h2>
+                        <div class="related-grid">
+                            <article class="news-card">
+                                <div class="card-image">
+                                    <img src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Quantum Computing">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-category">Technology</span>
+                                    <h3 class="card-title">Quantum Computing Milestone Achieved by Research Team</h3>
+                                    <div class="card-meta">
+                                        <span>John Smith</span>
+                                        <span>May 15, 2023</span>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <article class="news-card">
+                                <div class="card-image">
+                                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Cybersecurity">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-category">Technology</span>
+                                    <h3 class="card-title">Cybersecurity Firm Uncovers Major Vulnerability in Popular Apps</h3>
+                                    <div class="card-meta">
+                                        <span>Alex Turner</span>
+                                        <span>May 10, 2023</span>
+                                    </div>
+                                </div>
+                            </article>
+                            
+                            <article class="news-card">
+                                <div class="card-image">
+                                    <img src="https://images.unsplash.com/photo-1559757148-5c350d0d3c56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" alt="Space Exploration">
+                                </div>
+                                <div class="card-content">
+                                    <span class="card-category">Science</span>
+                                    <h3 class="card-title">NASA Announces New Mission to Explore Jupiter's Moon Europa</h3>
+                                    <div class="card-meta">
+                                        <span>Sarah Johnson</span>
+                                        <span>May 14, 2023</span>
+                                    </div>
+                                </div>
+                            </article>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <i class="fas fa-newspaper"></i>
+                        <span>NewsHub</span>
+                    </div>
+                    <p>Delivering accurate, timely, and engaging news from around the world. Our mission is to keep you informed with reliable journalism.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#" onclick="showHomepage()">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Categories</a></li>
+                        <li><a href="#">Technology</a></li>
+                        <li><a href="#">Science</a></li>
+                        <li><a href="#">Business</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#">Technology</a></li>
+                        <li><a href="#">Science</a></li>
+                        <li><a href="#">Business</a></li>
+                        <li><a href="#">Sports</a></li>
+                        <li><a href="#">Entertainment</a></li>
+                        <li><a href="#">Health</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-newsletter">
+                    <h3>Newsletter</h3>
+                    <p>Subscribe to our newsletter to receive the latest news and updates.</p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2023 NewsHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <span id="toastMessage">Notification message</span>
+    </div>
+
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobileMenu');
+        const navLinks = document.querySelector('.nav-links');
+        
+        mobileMenu.addEventListener('click', () => {
+            navLinks.classList.toggle('active');
+            mobileMenu.querySelector('i').classList.toggle('fa-bars');
+            mobileMenu.querySelector('i').classList.toggle('fa-times');
+        });
+        
+        // Close mobile menu when clicking on a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                mobileMenu.querySelector('i').classList.add('fa-bars');
+                mobileMenu.querySelector('i').classList.remove('fa-times');
+            });
+        });
+        
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Check for saved theme preference or default to light theme
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        
+        if (currentTheme === 'dark') {
+            document.body.classList.add('dark-theme');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-theme');
+            
+            if (document.body.classList.contains('dark-theme')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Category Filtering
+        const categoryFilters = document.querySelectorAll('.category-filter');
+        const newsCards = document.querySelectorAll('.news-card');
+        
+        categoryFilters.forEach(filter => {
+            filter.addEventListener('click', () => {
+                // Remove active class from all filters
+                categoryFilters.forEach(f => f.classList.remove('active'));
+                // Add active class to clicked filter
+                filter.classList.add('active');
+                
+                const category = filter.getAttribute('data-category');
+                
+                newsCards.forEach(card => {
+                    if (category === 'all' || card.getAttribute('data-category') === category) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // Search Functionality
+        const searchInput = document.getElementById('searchInput');
+        const searchButton = document.getElementById('searchButton');
+        
+        function performSearch() {
+            const searchTerm = searchInput.value.toLowerCase().trim();
+            
+            if (searchTerm === '') {
+                // Show all cards if search is empty
+                newsCards.forEach(card => {
+                    card.style.display = 'flex';
+                });
+                return;
+            }
+            
+            newsCards.forEach(card => {
+                const title = card.querySelector('.card-title').textContent.toLowerCase();
+                const excerpt = card.querySelector('.card-excerpt').textContent.toLowerCase();
+                const category = card.querySelector('.card-category').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || excerpt.includes(searchTerm) || category.includes(searchTerm)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            // Show toast notification
+            showToast(`Showing results for "${searchTerm}"`);
+        }
+        
+        searchButton.addEventListener('click', performSearch);
+        searchInput.addEventListener('keyup', (e) => {
+            if (e.key === 'Enter') {
+                performSearch();
+            }
+        });
+        
+        // Scroll Animations
+        const fadeElements = document.querySelectorAll('.fade-in');
+        
+        const fadeInOnScroll = () => {
+            fadeElements.forEach(element => {
+                const elementTop = element.getBoundingClientRect().top;
+                const elementVisible = 150;
+                
+                if (elementTop < window.innerHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+        
+        // Check on load and scroll
+        window.addEventListener('load', fadeInOnScroll);
+        window.addEventListener('scroll', fadeInOnScroll);
+        
+        // Back to Top Button
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Toast Notification
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toastMessage');
+        
+        function showToast(message) {
+            toastMessage.textContent = message;
+            toast.classList.add('visible');
+            
+            setTimeout(() => {
+                toast.classList.remove('visible');
+            }, 3000);
+        }
+        
+        // Newsletter Form
+        const newsletterForm = document.getElementById('newsletterForm');
+        
+        newsletterForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = newsletterForm.querySelector('input').value;
+            
+            // Simulate form submission
+            newsletterForm.querySelector('button').innerHTML = '<div class="loading"></div>';
+            
+            setTimeout(() => {
+                newsletterForm.reset();
+                newsletterForm.querySelector('button').innerHTML = '<i class="fas fa-paper-plane"></i>';
+                showToast('Thank you for subscribing to our newsletter!');
+            }, 1500);
+        });
+        
+        // Page Navigation Functions
+        function showArticle(articleId) {
+            document.getElementById('homepage').style.display = 'none';
+            document.getElementById('article-detail').style.display = 'block';
+            window.scrollTo(0, 0);
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+        }
+        
+        function showHomepage() {
+            document.getElementById('article-detail').style.display = 'none';
+            document.getElementById('homepage').style.display = 'block';
+            window.scrollTo(0, 0);
+            
+            // Update active nav link
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            document.querySelector('.nav-links a:first-child').classList.add('active');
+        }
+        
+        // Make news cards clickable
+        document.querySelectorAll('.news-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                showArticle('sample-article');
+            });
+        });
+        
+        // Make trending cards clickable
+        document.querySelectorAll('.trending-card').forEach(card => {
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', () => {
+                showArticle('sample-article');
+            });
+        });
+    </script>
+</body>
+</html>
