@@ -79,6 +79,18 @@ CREATE TABLE IF NOT EXISTS ad_requests (
 )
 """)
 
+# Admin bilan bog'lanish uchun yangi jadval
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS support_messages (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    message TEXT,
+    status TEXT DEFAULT 'pending',
+    admin_reply TEXT DEFAULT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
+
 conn.commit()
 
 def add_user(user_id, username, referrer_id=None):
@@ -290,4 +302,37 @@ def get_user_ad_requests(user_id):
 
 def get_pending_ad_requests_count():
     cursor.execute("SELECT COUNT(*) FROM ad_requests WHERE status = 'pending'")
+    return cursor.fetchone()[0]
+
+# Support messages uchun funksiyalar
+def add_support_message(user_id, message):
+    cursor.execute("""
+        INSERT INTO support_messages (user_id, message)
+        VALUES (?, ?)
+    """, (user_id, message))
+    conn.commit()
+    return cursor.lastrowid
+
+def get_pending_support_messages():
+    cursor.execute("SELECT * FROM support_messages WHERE status = 'pending' ORDER BY created_date DESC")
+    return cursor.fetchall()
+
+def get_support_message(message_id):
+    cursor.execute("SELECT * FROM support_messages WHERE id = ?", (message_id,))
+    return cursor.fetchone()
+
+def update_support_message_status(message_id, status, admin_reply=None):
+    cursor.execute("""
+        UPDATE support_messages 
+        SET status = ?, admin_reply = ?
+        WHERE id = ?
+    """, (status, admin_reply, message_id))
+    conn.commit()
+
+def get_user_support_messages(user_id):
+    cursor.execute("SELECT * FROM support_messages WHERE user_id = ? ORDER BY created_date DESC", (user_id,))
+    return cursor.fetchall()
+
+def get_pending_support_count():
+    cursor.execute("SELECT COUNT(*) FROM support_messages WHERE status = 'pending'")
     return cursor.fetchone()[0]

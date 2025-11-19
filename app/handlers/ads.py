@@ -8,7 +8,7 @@ from app.database.db import (
 )
 from app.keyboards.inline import (
     ads_menu_keyboard, ad_duration_keyboard, bot_check_keyboard,
-    confirm_ad_keyboard, back_to_menu_keyboard, back_to_ads_menu_keyboard
+    confirm_ad_keyboard, back_to_menu_keyboard, low_balance_keyboard
 )
 
 router = Router()
@@ -55,8 +55,8 @@ async def start_add_ad(call: types.CallbackQuery, state: FSMContext):
                 f"❌ <b>Balansingiz yetarli emas!</b>\n\n"
                 f"💰 Joriy balans: <b>{user[2]:,} so'm</b>\n"
                 f"💳 Minimal reklama narxi: <b>{min(AD_PRICES.values()):,} so'm</b>\n\n"
-                f"💡 Iltimos, balansingizni to'ldiring va qayta urinib ko'ring.",
-                reply_markup=back_to_ads_menu_keyboard()
+                f"💡 Balansingizni to'ldirish uchun admin bilan bog'lanishingiz mumkin.",
+                reply_markup=low_balance_keyboard()
             )
             return
         
@@ -245,7 +245,7 @@ async def confirm_ad_request(call: types.CallbackQuery, state: FSMContext):
             f"💳 Qolgan balans: <b>{get_user(call.from_user.id)[2]:,} so'm</b>\n\n"
             f"⏳ So'rov admin tomonidan tekshirilmoqda.\n"
             f"📞 Natijani 1-24 soat ichida olasiz.\n\n"
-            f"ℹ️ Savollar bo'lsa: @admin",
+            f"ℹ️ Savollar bo'lsa admin bilan bog'lanishingiz mumkin.",
             reply_markup=ads_menu_keyboard()
         )
     except Exception as e:
@@ -262,7 +262,7 @@ async def show_my_ads(call: types.CallbackQuery):
             await call.message.edit_text(
                 "📭 Siz hali hech qanday reklama so'rovi yubormagansiz.\n\n"
                 "📢 Birinchi reklamangizni qo'shish uchun «Reklama qo'shish» tugmasini bosing.",
-                reply_markup=back_to_ads_menu_keyboard()
+                reply_markup=ads_menu_keyboard()
             )
             return
         

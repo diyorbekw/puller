@@ -3,7 +3,7 @@ from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 from config import TOKEN, logger
-from app.handlers import start, withdraw, admin, ads
+from app.handlers import start, withdraw, admin, ads, support
 
 async def main():
     bot = Bot(
@@ -17,6 +17,7 @@ async def main():
     dp.include_router(withdraw.router)
     dp.include_router(admin.router)
     dp.include_router(ads.router)
+    dp.include_router(support.router)
 
     logger.info("🤖 Bot ishga tushdi...")
     print("🤖 Bot ishga tushdi...")

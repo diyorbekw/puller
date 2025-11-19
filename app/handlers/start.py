@@ -11,7 +11,7 @@ from app.database.db import (
     mark_referral_reward_given, get_referrer_id, add_user_task,
     get_user_task_status
 )
-from app.keyboards.inline import main_menu, tasks_keyboard, task_detail_keyboard, back_to_menu_keyboard, referral_keyboard
+from app.keyboards.inline import main_menu, tasks_keyboard, task_detail_keyboard, back_to_menu_keyboard, referral_keyboard, contact_admin_keyboard
 
 router = Router()
 
@@ -264,6 +264,31 @@ async def show_referral(call: types.CallbackQuery):
         logger.error(f"Referral error: {e}")
         await call.answer("❌ Xatolik yuz berdi", show_alert=True)
 
+@router.callback_query(F.data == "contact_admin")
+async def contact_admin_info(call: types.CallbackQuery):
+    try:
+        logger.info(f"Contact admin info: {call.from_user.id}")
+        await call.message.edit_text(
+            "📞 <b>Admin bilan bog'lanish</b>\n\n"
+            "ℹ️ Savol, taklif yoki shikoyatingiz bo'lsa, quyidagi tugma orqali xabar yuboring.\n\n"
+            "📝 <b>Xabar yuborish uchun:</b>\n"
+            "1. «Xabar yuborish» tugmasini bosing\n"
+            "2. Xabaringizni yozing\n"
+            "3. Xabar adminga yuboriladi\n"
+            "4. Admin javobini kutishingiz kerak\n\n"
+            "⏳ <b>Javob qancha kutiladi?</b>\n"
+            "• Odatda 1-24 soat ichida\n"
+            "• Ish vaqtlari: 09:00 - 18:00",
+            reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[
+                [types.InlineKeyboardButton(text="📩 Xabar yuborish", callback_data="send_support_message")],
+                [types.InlineKeyboardButton(text="📋 Mening xabarlarim", callback_data="my_support_messages")],
+                [types.InlineKeyboardButton(text="🔙 Asosiy menyu", callback_data="main_menu")]
+            ])
+        )
+    except Exception as e:
+        logger.error(f"Contact admin info error: {e}")
+        await call.answer("❌ Xatolik yuz berdi", show_alert=True)
+
 @router.callback_query(F.data == "stats")
 async def show_stats(call: types.CallbackQuery):
     try:
@@ -310,9 +335,11 @@ async def show_help(call: types.CallbackQuery):
             "→ Do'stlaringizni taklif qiling, ular ro'yxatdan o'tganda siz va ular 50 so'm bonus olasiz.\n\n"
             "❓ <b>Reklama qanday qo'shiladi?</b>\n"
             "→ «Reklama» bo'limiga o'ting va kanalingizni reklama qilish uchun so'rov yuboring.\n\n"
+            "❓ <b>Admin bilan qanday bog'lansam bo'ladi?</b>\n"
+            "→ «Admin bilan bog'lanish» bo'limiga o'ting va xabaringizni yuboring.\n\n"
             "❓ <b>To'lov qancha vaqtda tushadi?</b>\n"
             "→ To'lovlar admin tomonidan 1-24 soat ichida amalga oshiriladi.\n\n"
-            "📞 <b>Qo'shimcha savollar bo'lsa:</b> @admin",
+            "📞 <b>Qo'shimcha savollar bo'lsa:</b> Admin bilan bog'lanishingiz mumkin.",
             reply_markup=back_to_menu_keyboard()
         )
     except Exception as e:

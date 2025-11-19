@@ -8,7 +8,7 @@ from app.database.db import (
     get_active_tasks, get_all_withdraw_requests,
     get_total_users, get_pending_withdraw_count, get_active_tasks_count, get_total_balance,
     get_pending_ad_requests, get_ad_request, update_ad_request_status,
-    get_pending_ad_requests_count
+    get_pending_ad_requests_count, get_pending_support_count
 )
 from app.keyboards.inline import admin_keyboard, admin_ad_action_keyboard
 
@@ -33,12 +33,14 @@ async def admin_panel(msg: types.Message):
 
         pending_withdrawals = get_pending_withdraw_count()
         pending_ads = get_pending_ad_requests_count()
+        pending_support = get_pending_support_count()
         
         await msg.answer(
             f"👑 <b>Admin Panel</b>\n\n"
             f"📊 Statistika:\n"
             f"• 📭 Pul so'rovlari: {pending_withdrawals} ta\n"
-            f"• 📢 Reklama so'rovlari: {pending_ads} ta\n\n"
+            f"• 📢 Reklama so'rovlari: {pending_ads} ta\n"
+            f"• 📩 Support xabarlari: {pending_support} ta\n\n"
             "Quyidagi bo'limlardan birini tanlang:",
             reply_markup=admin_keyboard()
         )
@@ -287,7 +289,7 @@ async def approve_ad_request(call: types.CallbackQuery, bot: Bot):
         
         # Topshiriq sifatida qo'shish
         channel_link = f"https://t.me/{channel_username}"
-        reward = 75  # Standart mukofot
+        reward = 1000  # Standart mukofot
         
         task_id = add_task(channel_link, channel_username, reward, description)
         
@@ -397,6 +399,7 @@ async def admin_stats(call: types.CallbackQuery):
         active_tasks = get_active_tasks_count()
         total_balance = get_total_balance()
         pending_ads = get_pending_ad_requests_count()
+        pending_support = get_pending_support_count()
         
         await call.message.edit_text(
             f"📊 <b>Bot Statistikasi</b>\n\n"
@@ -404,6 +407,7 @@ async def admin_stats(call: types.CallbackQuery):
             f"💰 Jami balans: <b>{total_balance:,} so'm</b>\n"
             f"📭 Kutilayotgan pul so'rovlari: <b>{pending_requests}</b>\n"
             f"📢 Kutilayotgan reklama so'rovlari: <b>{pending_ads}</b>\n"
+            f"📩 Kutilayotgan support xabarlari: <b>{pending_support}</b>\n"
             f"🎯 Faol topshiriqlar: <b>{active_tasks}</b>\n\n"
             f"🔄 Yangilangan: {call.message.date.strftime('%Y-%m-%d %H:%M')}",
             reply_markup=types.InlineKeyboardMarkup(inline_keyboard=[

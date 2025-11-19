@@ -8,6 +8,7 @@ def main_menu():
         [InlineKeyboardButton(text="👥 Referal", callback_data="referral")],
         [InlineKeyboardButton(text="📢 Reklama", callback_data="ads_menu")],
         [InlineKeyboardButton(text="💸 Pul yechish", callback_data="withdraw")],
+        [InlineKeyboardButton(text="📞 Admin bilan bog'lanish", callback_data="contact_admin")],
         [InlineKeyboardButton(text="📊 Statistika", callback_data="stats")],
         [InlineKeyboardButton(text="ℹ️ Yordam", callback_data="help")]
     ])
@@ -62,6 +63,7 @@ def admin_keyboard():
         [InlineKeyboardButton(text="💰 Pul yechish so'rovlari", callback_data="admin_withdraw_requests")],
         [InlineKeyboardButton(text="🎯 Topshiriq qo'shish", callback_data="admin_add_task")],
         [InlineKeyboardButton(text="📢 Reklama so'rovlari", callback_data="admin_ad_requests")],
+        [InlineKeyboardButton(text="📩 Support xabarlari", callback_data="admin_support_messages")],
         [InlineKeyboardButton(text="📊 Statistika", callback_data="admin_stats")],
         [InlineKeyboardButton(text="🔙 Asosiy menyu", callback_data="main_menu")]
     ])
@@ -114,8 +116,28 @@ def admin_ad_action_keyboard(request_id):
         ],
         [InlineKeyboardButton(text="🔙 Orqaga", callback_data="admin_ad_requests")]
     ])
-    
-def back_to_ads_menu_keyboard():
+
+# Support uchun yangi keyboardlar
+def contact_admin_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text="🔙 Reklama menyusiga qaytish", callback_data="ads_menu")]
+        [InlineKeyboardButton(text="📞 Admin bilan bog'lanish", callback_data="contact_admin")],
+        [InlineKeyboardButton(text="🔙 Asosiy menyu", callback_data="main_menu")]
+    ])
+
+def low_balance_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="💳 Balans to'ldirish", callback_data="contact_admin")],
+        [InlineKeyboardButton(text="🔙 Orqaga", callback_data="ads_menu")]
+    ])
+
+def admin_support_action_keyboard(message_id):
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✍️ Javob berish", callback_data=f"reply_support_{message_id}")],
+        [InlineKeyboardButton(text="✅ Yopish", callback_data=f"close_support_{message_id}")],
+        [InlineKeyboardButton(text="🔙 Orqaga", callback_data="admin_support_messages")]
+    ])
+
+def cancel_support_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="cancel_support")]
     ])
