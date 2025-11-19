@@ -1,10 +1,9 @@
 from aiogram import Router, types, F
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
-from config import logger
+from config import logger, MIN_WITHDRAW, NO_COMMISSION_LIMIT
 from app.database.db import get_user, update_balance, add_withdraw_request
 from app.keyboards.inline import back_to_menu_keyboard, confirm_withdraw_keyboard
-from config import MIN_WITHDRAW, NO_COMMISSION_LIMIT
 
 router = Router()
 
@@ -106,7 +105,7 @@ async def confirm_withdraw(call: types.CallbackQuery, state: FSMContext):
             f"🧾 Komissiya: <b>{commission:,} so'm</b>\n\n"
             f"⏳ So'rov admin tomonidan tekshirilmoqda.\n"
             f"💰 Pul kartangizga 1-24 soat ichida tushadi.\n\n"
-            f"📞 Savollar bo'lsa: @admin",
+            f"📞 Savollar bo'lsa: @avnadmin",
             reply_markup=back_to_menu_keyboard()
         )
     except Exception as e:

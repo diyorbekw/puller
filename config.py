@@ -1,15 +1,16 @@
-TOKEN = "7694896433:AAEMFZL1HPBmnkiG88BpG3WPjeLr_pW7gIk"
-ADMIN_ID = 5515940993
-
-# Pul yechish limitlari
-MIN_WITHDRAW = 10000
-NO_COMMISSION_LIMIT = 20000
+import logging
 
 # Bot konfiguratsiyasi
+TOKEN = "7694896433:AAEMFZL1HPBmnkiG88BpG3WPjeLr_pW7gIk"
+ADMIN_ID = 5515940993 
 BOT_USERNAME = "DiyorPortfolioBot"
 
-# Logging konfiguratsiyasi
-import logging
+# Pul yechish sozlamalari
+MIN_WITHDRAW = 10000
+NO_COMMISSION_LIMIT = 50000
+REFERRAL_BONUS = 50
+
+# Logger sozlamalari
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -18,4 +19,5 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
 logger = logging.getLogger(__name__)

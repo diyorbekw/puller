@@ -6,12 +6,14 @@ os.makedirs("data", exist_ok=True)
 conn = sqlite3.connect("data/database.db", check_same_thread=False)
 cursor = conn.cursor()
 
+# Mavjud jadvallar
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS users (
     user_id INTEGER PRIMARY KEY,
     username TEXT,
     balance INTEGER DEFAULT 0,
-    joined_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    joined_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    referrer_id INTEGER DEFAULT NULL
 )
 """)
 
@@ -46,14 +48,28 @@ CREATE TABLE IF NOT EXISTS user_tasks (
     task_id INTEGER,
     status TEXT DEFAULT 'pending',
     completed_date TIMESTAMP,
-    FOREIGN KEY (task_id) REFERENCES tasks (id)
+    UNIQUE(user_id, task_id)
+)
+""")
+
+# Yangi referal jadvali
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS referrals (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    inviter_id INTEGER,
+    referred_id INTEGER UNIQUE,
+    reward_given BOOLEAN DEFAULT 0,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 )
 """)
 
 conn.commit()
 
-def add_user(user_id, username):
-    cursor.execute("INSERT OR IGNORE INTO users (user_id, username) VALUES (?, ?)", (user_id, username))
+def add_user(user_id, username, referrer_id=None):
+    cursor.execute(
+        "INSERT OR IGNORE INTO users (user_id, username, referrer_id) VALUES (?, ?, ?)", 
+        (user_id, username, referrer_id)
+    )
     conn.commit()
 
 def get_user(user_id):
@@ -173,15 +189,56 @@ def get_weekly_withdraw_total():
     result = cursor.fetchone()[0]
     return result if result else 0
 
-# Admin topshiriqlarini boshqarish
-def get_all_tasks():
-    cursor.execute("SELECT * FROM tasks ORDER BY created_date DESC")
-    return cursor.fetchall()
+# Referal tizimi uchun yangi funksiyalar
+def add_referral(inviter_id, referred_id):
+    """Yangi referal qo'shish"""
+    cursor.execute(
+        "INSERT OR IGNORE INTO referrals (inviter_id, referred_id) VALUES (?, ?)",
+        (inviter_id, referred_id)
+    )
+    conn.commit()
+    return cursor.lastrowid
 
-def update_task_status(task_id, is_active):
-    cursor.execute("UPDATE tasks SET is_active = ? WHERE id = ?", (is_active, task_id))
+def check_referral_exists(referred_id):
+    """Referal allaqachon mavjudligini tekshirish"""
+    cursor.execute("SELECT * FROM referrals WHERE referred_id = ?", (referred_id,))
+    return cursor.fetchone() is not None
+
+def get_user_referrals(user_id):
+    """Foydalanuvchi referallarini olish"""
+    cursor.execute("""
+        SELECT COUNT(*) FROM referrals 
+        WHERE inviter_id = ? AND reward_given = 1
+    """, (user_id,))
+    return cursor.fetchone()[0]
+
+def get_total_referral_earnings(user_id):
+    """Foydalanuvchi referallardan jami topgan summasini olish"""
+    cursor.execute("""
+        SELECT COUNT(*) * 50 FROM referrals 
+        WHERE inviter_id = ? AND reward_given = 1
+    """, (user_id,))
+    return cursor.fetchone()[0]
+
+def mark_referral_reward_given(referred_id):
+    """Referal mukofoti berilganligini belgilash"""
+    cursor.execute(
+        "UPDATE referrals SET reward_given = 1 WHERE referred_id = ?",
+        (referred_id,)
+    )
     conn.commit()
 
-def delete_task(task_id):
-    cursor.execute("DELETE FROM tasks WHERE id = ?", (task_id,))
-    conn.commit()
+def get_referrer_id(referred_id):
+    """Referal orqali kelgan foydalanuvchining refererini topish"""
+    cursor.execute("SELECT inviter_id FROM referrals WHERE referred_id = ?", (referred_id,))
+    result = cursor.fetchone()
+    return result[0] if result else None
+
+def get_user_task_status(user_id, task_id):
+    """Foydalanuvchi topshirig'ining holatini olish"""
+    cursor.execute("""
+        SELECT status FROM user_tasks 
+        WHERE user_id = ? AND task_id = ?
+    """, (user_id, task_id))
+    result = cursor.fetchone()
+    return result[0] if result else None
