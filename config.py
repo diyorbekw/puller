@@ -10,9 +10,9 @@ NO_COMMISSION_LIMIT = 50000
 REFERRAL_BONUS = 50
 
 AD_PRICES = {
-    "1_week": 50,
-    "2_weeks": 75,
-    "1_month": 100
+    "1_week": 2000,
+    "2_weeks": 3500,
+    "1_month": 6000
 }
 
 logging.basicConfig(
