@@ -65,11 +65,12 @@ async def start_cmd(msg: types.Message, command: CommandObject, bot: Bot):
         
         # Agar referal orqali kelgan bo'lsa
         if referrer_id and referrer_id != msg.from_user.id:
-            welcome_text += "🎁 Siz referal orqali qo'shildingiz!\n\n"
+            welcome_text += "🎁 Siz referal orqali qo'shildingiz! 50 so'm bonus oldingiz.\n\n"
         
         welcome_text += (
             "🎯 <b>Topshiriqlarni bajarib pul ishlang!</b>\n"
             "👥 <b>Do'stlaringizni taklif qiling va bonus oling!</b>\n"
+            "📢 <b>Kanalingizni reklama qiling va obunchilarni oshiring!</b>\n"
             "💸 Yig'ilgan mablag'ingizni kartangizga yechib oling!"
         )
         
@@ -307,9 +308,11 @@ async def show_help(call: types.CallbackQuery):
             "→ Topshiriq sahifasida «Tekshirish» tugmasi bor. Obuna bo'lganingizdan so'ng shu tugmani bosing.\n\n"
             "❓ <b>Referal tizimi qanday ishlaydi?</b>\n"
             "→ Do'stlaringizni taklif qiling, ular ro'yxatdan o'tganda siz va ular 50 so'm bonus olasiz.\n\n"
+            "❓ <b>Reklama qanday qo'shiladi?</b>\n"
+            "→ «Reklama» bo'limiga o'ting va kanalingizni reklama qilish uchun so'rov yuboring.\n\n"
             "❓ <b>To'lov qancha vaqtda tushadi?</b>\n"
             "→ To'lovlar admin tomonidan 1-24 soat ichida amalga oshiriladi.\n\n"
-            "📞 <b>Qo'shimcha savollar bo'lsa:</b> @avnadmin",
+            "📞 <b>Qo'shimcha savollar bo'lsa:</b> @admin",
             reply_markup=back_to_menu_keyboard()
         )
     except Exception as e:

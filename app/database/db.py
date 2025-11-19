@@ -63,6 +63,22 @@ CREATE TABLE IF NOT EXISTS referrals (
 )
 """)
 
+# Reklama so'rovlari uchun yangi jadval
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS ad_requests (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    channel_name TEXT,
+    channel_username TEXT,
+    duration TEXT,
+    description TEXT,
+    price INTEGER,
+    status TEXT DEFAULT 'pending',
+    admin_comment TEXT DEFAULT NULL,
+    created_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)
+""")
+
 conn.commit()
 
 def add_user(user_id, username, referrer_id=None):
@@ -242,3 +258,36 @@ def get_user_task_status(user_id, task_id):
     """, (user_id, task_id))
     result = cursor.fetchone()
     return result[0] if result else None
+
+# Reklama so'rovlari uchun funksiyalar
+def add_ad_request(user_id, channel_name, channel_username, duration, description, price):
+    cursor.execute("""
+        INSERT INTO ad_requests (user_id, channel_name, channel_username, duration, description, price)
+        VALUES (?, ?, ?, ?, ?, ?)
+    """, (user_id, channel_name, channel_username, duration, description, price))
+    conn.commit()
+    return cursor.lastrowid
+
+def get_pending_ad_requests():
+    cursor.execute("SELECT * FROM ad_requests WHERE status = 'pending' ORDER BY created_date DESC")
+    return cursor.fetchall()
+
+def get_ad_request(request_id):
+    cursor.execute("SELECT * FROM ad_requests WHERE id = ?", (request_id,))
+    return cursor.fetchone()
+
+def update_ad_request_status(request_id, status, admin_comment=None):
+    cursor.execute("""
+        UPDATE ad_requests 
+        SET status = ?, admin_comment = ?
+        WHERE id = ?
+    """, (status, admin_comment, request_id))
+    conn.commit()
+
+def get_user_ad_requests(user_id):
+    cursor.execute("SELECT * FROM ad_requests WHERE user_id = ? ORDER BY created_date DESC", (user_id,))
+    return cursor.fetchall()
+
+def get_pending_ad_requests_count():
+    cursor.execute("SELECT COUNT(*) FROM ad_requests WHERE status = 'pending'")
+    return cursor.fetchone()[0]

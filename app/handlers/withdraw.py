@@ -105,7 +105,7 @@ async def confirm_withdraw(call: types.CallbackQuery, state: FSMContext):
             f"🧾 Komissiya: <b>{commission:,} so'm</b>\n\n"
             f"⏳ So'rov admin tomonidan tekshirilmoqda.\n"
             f"💰 Pul kartangizga 1-24 soat ichida tushadi.\n\n"
-            f"📞 Savollar bo'lsa: @avnadmin",
+            f"📞 Savollar bo'lsa: @admin",
             reply_markup=back_to_menu_keyboard()
         )
     except Exception as e:

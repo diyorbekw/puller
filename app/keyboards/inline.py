@@ -1,11 +1,12 @@
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from config import BOT_USERNAME
+from config import BOT_USERNAME, AD_PRICES
 
 def main_menu():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="🎯 Topshiriqlar", callback_data="tasks")],
         [InlineKeyboardButton(text="💰 Mening balansim", callback_data="my_balance")],
         [InlineKeyboardButton(text="👥 Referal", callback_data="referral")],
+        [InlineKeyboardButton(text="📢 Reklama", callback_data="ads_menu")],
         [InlineKeyboardButton(text="💸 Pul yechish", callback_data="withdraw")],
         [InlineKeyboardButton(text="📊 Statistika", callback_data="stats")],
         [InlineKeyboardButton(text="ℹ️ Yordam", callback_data="help")]
@@ -60,6 +61,7 @@ def admin_keyboard():
     return InlineKeyboardMarkup(inline_keyboard=[
         [InlineKeyboardButton(text="💰 Pul yechish so'rovlari", callback_data="admin_withdraw_requests")],
         [InlineKeyboardButton(text="🎯 Topshiriq qo'shish", callback_data="admin_add_task")],
+        [InlineKeyboardButton(text="📢 Reklama so'rovlari", callback_data="admin_ad_requests")],
         [InlineKeyboardButton(text="📊 Statistika", callback_data="admin_stats")],
         [InlineKeyboardButton(text="🔙 Asosiy menyu", callback_data="main_menu")]
     ])
@@ -73,4 +75,47 @@ def referral_keyboard(user_id):
             )
         ],
         [InlineKeyboardButton(text="🔙 Asosiy menyu", callback_data="main_menu")]
+    ])
+
+# Reklama uchun yangi keyboardlar
+def ads_menu_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="📢 Reklama qo'shish", callback_data="add_ad")],
+        [InlineKeyboardButton(text="📋 Mening reklamalarim", callback_data="my_ads")],
+        [InlineKeyboardButton(text="🔙 Asosiy menyu", callback_data="main_menu")]
+    ])
+
+def ad_duration_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="1 hafta - 2,000 so'm", callback_data="ad_duration_1_week")],
+        [InlineKeyboardButton(text="2 hafta - 3,500 so'm", callback_data="ad_duration_2_weeks")],
+        [InlineKeyboardButton(text="1 oy - 6,000 so'm", callback_data="ad_duration_1_month")],
+        [InlineKeyboardButton(text="🔙 Bekor qilish", callback_data="ads_menu")]
+    ])
+
+def bot_check_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Ha, qo'shdim", callback_data="bot_added_yes")],
+        [InlineKeyboardButton(text="❌ Yo'q", callback_data="bot_added_no")],
+        [InlineKeyboardButton(text="🔙 Bekor qilish", callback_data="ads_menu")]
+    ])
+
+def confirm_ad_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="✅ Tasdiqlash", callback_data="confirm_ad")],
+        [InlineKeyboardButton(text="❌ Bekor qilish", callback_data="ads_menu")]
+    ])
+
+def admin_ad_action_keyboard(request_id):
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [
+            InlineKeyboardButton(text="✅ Ma'qullash", callback_data=f"ad_approve_{request_id}"),
+            InlineKeyboardButton(text="❌ Rad etish", callback_data=f"ad_reject_{request_id}")
+        ],
+        [InlineKeyboardButton(text="🔙 Orqaga", callback_data="admin_ad_requests")]
+    ])
+    
+def back_to_ads_menu_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="🔙 Reklama menyusiga qaytish", callback_data="ads_menu")]
     ])
